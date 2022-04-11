@@ -25,6 +25,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Camera")
 	UCameraComponent* Camera;
+
+private:
+	float M_ZoomRate;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -37,4 +40,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void ZoomCamera(float inputValue);
+
 };
+
+
