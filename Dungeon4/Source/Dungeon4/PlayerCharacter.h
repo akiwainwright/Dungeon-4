@@ -26,6 +26,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Camera")
 	UCameraComponent* Camera;
 
+	//Making the players rely on its movement to adjust facing direction
+
 private:
 	float M_ZoomRate;
 	
@@ -41,6 +43,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void ZoomCamera(float inputValue);
+	void MoveForwards(float inputValue);
+	void MoveRight(float inputValue);
 
 };
 

@@ -3,6 +3,8 @@
 
 #include "PlayerCharacter.h"
 
+#include "GameFramework/CharacterMovementComponent.h"
+
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
@@ -43,6 +45,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	PlayerInputComponent->BindAxis("CameraZoom", this, &APlayerCharacter::ZoomCamera);
+	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForwards);
+	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
+	
 
 }
 
@@ -52,4 +57,20 @@ void APlayerCharacter::ZoomCamera(float inputValue)
 	float newArmLength = currentArmLength - (inputValue * M_ZoomRate);
 
 	SpringArm->TargetArmLength = FMath::Clamp(newArmLength, 600.0f, 900.0f);
+}
+
+void APlayerCharacter::MoveForwards(float inputValue)
+{
+	if(inputValue != 0)
+	{
+		GetCharacterMovement()->AddInputVector(FVector(inputValue, 0.0f, 0.0f));
+	}
+}
+
+void APlayerCharacter::MoveRight(float inputValue)
+{
+	if(inputValue != 0)
+	{
+		GetCharacterMovement()->AddInputVector(FVector(0.0f, inputValue, 0.0f));
+	}
 }
