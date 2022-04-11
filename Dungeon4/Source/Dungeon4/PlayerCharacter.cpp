@@ -2,7 +2,6 @@
 
 
 #include "PlayerCharacter.h"
-
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -79,6 +78,7 @@ void APlayerCharacter::MoveForwards(float inputValue)
 	if(inputValue != 0)
 	{
 		GetCharacterMovement()->AddInputVector(FVector(inputValue, 0.0f, 0.0f));
+		UE_LOG(LogTemp, Warning, TEXT("Character Velocity X:%f Y:%f Z:%f"), GetVelocity().X, GetVelocity().Y, GetVelocity().Z);
 	}
 }
 
@@ -87,5 +87,6 @@ void APlayerCharacter::MoveRight(float inputValue)
 	if(inputValue != 0)
 	{
 		GetCharacterMovement()->AddInputVector(FVector(0.0f, inputValue, 0.0f));
+		UE_LOG(LogTemp, Warning, TEXT("Character Velocity X:%f Y:%f Z:%f"), GetVelocity().X, GetVelocity().Y, GetVelocity().Z);
 	}
 }
