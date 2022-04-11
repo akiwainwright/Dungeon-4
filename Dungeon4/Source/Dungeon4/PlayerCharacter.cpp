@@ -16,13 +16,28 @@ APlayerCharacter::APlayerCharacter()
 	SpringArm->SetupAttachment(GetRootComponent());
 	SpringArm->TargetArmLength = 700.0f;
 	SpringArm->SetRelativeRotation(FRotator(-90.0f, 0.0f, 0.0f));
+
+	//Preventing the camera from rotating with the camera
+	SpringArm->bInheritPitch = false;
+	SpringArm->bInheritRoll = false;
+	SpringArm->bInheritYaw = false;
+	
 	M_ZoomRate = 40.0f;
+	
+	
 
 	//Setting up camera to be attached to spring arm
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	
+	
 
+	//Making player face the right way when moving
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+	bUseControllerRotationYaw = false;
+	
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
 // Called when the game starts or when spawned
