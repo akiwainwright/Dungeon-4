@@ -14,7 +14,7 @@ APlayerCharacter::APlayerCharacter()
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(GetRootComponent());
 	SpringArm->TargetArmLength = 700.0f;
-	SpringArm->SetRelativeRotation(FRotator(-90.0f, 0.0f, 0.0f));
+	SpringArm->SetRelativeRotation(FRotator(-70.0f, 0.0f, 0.0f));
 
 	//Preventing the camera from rotating with the camera
 	SpringArm->bInheritPitch = false;
