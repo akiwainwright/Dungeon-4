@@ -21,6 +21,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Door Mesh")
 	UStaticMeshComponent* DoorMesh;
 
+private:
+	bool m_Opened;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -28,5 +31,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	bool GetDoorState() { return m_Opened; }
+	void DoorOpened();
 
 };

@@ -14,6 +14,8 @@ ADoor::ADoor()
 
 	DoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door Block"));
 	DoorMesh->SetupAttachment(GetRootComponent());
+
+	m_Opened = false;
 }
 
 // Called when the game starts or when spawned
@@ -28,5 +30,10 @@ void ADoor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ADoor::DoorOpened()
+{
+	m_Opened = true;
 }
 

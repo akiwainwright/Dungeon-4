@@ -51,10 +51,16 @@ void ADoorSwitch::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 void ADoorSwitch::TriggerSwitch(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	FVector CurrentLocation = TargetDoor->GetRootComponent()->GetChildComponent(0)->GetComponentLocation();
-	FVector OpenDirection = TargetDoor->GetRootComponent()->GetChildComponent(0)->GetUpVector();
-	TargetDoor->GetRootComponent()->GetChildComponent(0)->SetWorldLocation(CurrentLocation + (OpenDirection * 300));
+	if(!TargetDoor->GetDoorState())
+	{
+		TargetDoor->DoorOpened();
+		FVector CurrentLocation = TargetDoor->GetRootComponent()->GetChildComponent(0)->GetComponentLocation();
+		FVector OpenDirection = TargetDoor->GetRootComponent()->GetChildComponent(0)->GetUpVector();
+		TargetDoor->GetRootComponent()->GetChildComponent(0)->SetWorldLocation(CurrentLocation + (OpenDirection * 300));
 
-	UE_LOG(LogTemp, Warning, TEXT("Door Opened"));
+		UE_LOG(LogTemp, Warning, TEXT("Door Opened"));
+	}
+
+	
 }
 
