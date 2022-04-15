@@ -22,7 +22,12 @@ public:
 	UStaticMeshComponent* DoorMesh;
 
 private:
-	bool m_Opened;
+	float M_OpenSpeed;
+	
+	bool M_Opened;
+	
+	FVector M_OpenedOffset;
+	FVector M_InitialLocation;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -32,7 +37,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	bool GetDoorState() { return m_Opened; }
+	bool GetDoorState() { return M_Opened; }
 	void DoorOpened();
 
+	UFUNCTION(BlueprintImplementableEvent, Category="Open Door")
+	void OpenDoor();
+
+	UFUNCTION(BlueprintCallable)
+	void RaiseDoor(float raisedValue);
 };

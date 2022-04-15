@@ -25,6 +25,9 @@ public:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category="Door")
 	class ADoor* TargetDoor;
 
+private:
+	FVector M_InitialPosition;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -39,4 +42,9 @@ public:
 	UFUNCTION()
 	void TriggerSwitch(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
 
+	UFUNCTION(BlueprintImplementableEvent, Category="Door Switch")
+	void PressedSwitch();
+	
+	UFUNCTION(BlueprintCallable)
+	void LowerSwitch(float loweredValue);
 };

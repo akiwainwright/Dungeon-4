@@ -30,7 +30,7 @@ ADoorSwitch::ADoorSwitch()
 void ADoorSwitch::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	M_InitialPosition = GetActorLocation();
 	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &ADoorSwitch::TriggerSwitch);	
 }
 
@@ -53,14 +53,21 @@ void ADoorSwitch::TriggerSwitch(UPrimitiveComponent* OverlappedComponent, AActor
 {
 	if(!TargetDoor->GetDoorState())
 	{
+		PressedSwitch();
+		
 		TargetDoor->DoorOpened();
-		FVector CurrentLocation = TargetDoor->GetRootComponent()->GetChildComponent(0)->GetComponentLocation();
-		FVector OpenDirection = TargetDoor->GetRootComponent()->GetChildComponent(0)->GetUpVector();
-		TargetDoor->GetRootComponent()->GetChildComponent(0)->SetWorldLocation(CurrentLocation + (OpenDirection * 300));
-
+		TargetDoor->OpenDoor();
 		UE_LOG(LogTemp, Warning, TEXT("Door Opened"));
 	}
 
 	
+}
+
+void ADoorSwitch::LowerSwitch(float loweredValue)
+{
+	FVector LoweredLocation = M_InitialPosition;
+	LoweredLocation.Z += loweredValue;
+
+	SetActorLocation(LoweredLocation);
 }
 
