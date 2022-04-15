@@ -25,7 +25,12 @@ public:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category="Door")
 	class ADoor* TargetDoor;
 
+	FTimerHandle DoorSwitchPressDelay;
+
 private:
+	float M_PressDelay;
+	bool M_PlayerOnSwitch;
+	
 	FVector M_InitialPosition;
 
 protected:
@@ -42,9 +47,16 @@ public:
 	UFUNCTION()
 	void TriggerSwitch(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
 
+	UFUNCTION()
+	void MovedOffSwitch(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
+	
 	UFUNCTION(BlueprintImplementableEvent, Category="Door Switch")
 	void PressedSwitch();
 	
 	UFUNCTION(BlueprintCallable)
 	void LowerSwitch(float loweredValue);
+
+	void SwitchTriggered();
 };
+
+

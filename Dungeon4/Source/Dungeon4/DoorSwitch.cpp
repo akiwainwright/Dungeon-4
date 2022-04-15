@@ -24,6 +24,9 @@ ADoorSwitch::ADoorSwitch()
 
 	SwitchMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Switch Mesh"));
 	SwitchMesh->SetupAttachment(GetRootComponent());
+
+	M_PlayerOnSwitch = false;
+	M_PressDelay = 1.5f;
 }
 
 // Called when the game starts or when spawned
@@ -51,23 +54,37 @@ void ADoorSwitch::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 void ADoorSwitch::TriggerSwitch(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if(!TargetDoor->GetDoorState())
+	M_PlayerOnSwitch = true;
+	if(!TargetDoor->DoorOpened())
 	{
-		PressedSwitch();
-		
-		TargetDoor->DoorOpened();
-		TargetDoor->OpenDoor();
-		UE_LOG(LogTemp, Warning, TEXT("Door Opened"));
+		GetWorldTimerManager().SetTimer(DoorSwitchPressDelay, this, &ADoorSwitch::SwitchTriggered, M_PressDelay);
 	}
+}
 
-	
+void ADoorSwitch::MovedOffSwitch(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+   UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	M_PlayerOnSwitch = false;
 }
 
 void ADoorSwitch::LowerSwitch(float loweredValue)
 {
+	TargetDoor->DelayDoorOpening();
 	FVector LoweredLocation = M_InitialPosition;
 	LoweredLocation.Z += loweredValue;
 
 	SetActorLocation(LoweredLocation);
 }
 
+void ADoorSwitch::SwitchTriggered()
+{
+	if(M_PlayerOnSwitch)
+	{
+		PressedSwitch();
+
+		//if(!TargetDoor->DoorOpened())
+		{
+			TargetDoor->DelayDoorOpening();
+		}
+	}
+}

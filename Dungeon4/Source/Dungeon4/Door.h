@@ -23,6 +23,7 @@ public:
 
 private:
 	float M_OpenSpeed;
+	float M_DoorOpenDelay;
 	
 	bool M_Opened;
 	
@@ -37,12 +38,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	bool GetDoorState() { return M_Opened; }
-	void DoorOpened();
+	bool DoorOpened() { return M_Opened; }
+	
+	void SetDoorOpen();
 
 	UFUNCTION(BlueprintImplementableEvent, Category="Open Door")
 	void OpenDoor();
 
 	UFUNCTION(BlueprintCallable)
 	void RaiseDoor(float raisedValue);
+
+	void DelayDoorOpening();
 };

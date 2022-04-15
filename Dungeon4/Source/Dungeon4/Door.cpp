@@ -14,8 +14,7 @@ ADoor::ADoor()
 
 	DoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door Block"));
 	DoorMesh->SetupAttachment(GetRootComponent());
-
-	M_OpenSpeed = 1;
+	
 	M_Opened = false;
 	
 }
@@ -25,6 +24,7 @@ void ADoor::BeginPlay()
 {
 	Super::BeginPlay();
 	M_InitialLocation = DoorMesh->GetComponentLocation();
+	
 }
 
 // Called every frame
@@ -34,17 +34,23 @@ void ADoor::Tick(float DeltaTime)
 
 }
 
-void ADoor::DoorOpened()
+void ADoor::SetDoorOpen()
 {
 	M_Opened = true;
 }
 
 void ADoor::RaiseDoor(float raisedValue)
 {
+	DoorOpened();
 	FVector RaisedLocation = M_InitialLocation;
 	RaisedLocation.Z += raisedValue;
 
 	DoorMesh->SetWorldLocation(RaisedLocation);
+}
+
+void ADoor::DelayDoorOpening()
+{
+	OpenDoor();
 }
 
 
