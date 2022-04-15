@@ -2,6 +2,8 @@
 
 
 #include "PlayerCharacter.h"
+
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -22,14 +24,10 @@ APlayerCharacter::APlayerCharacter()
 	SpringArm->bInheritYaw = false;
 	
 	M_ZoomRate = 40.0f;
-	
-	
 
 	//Setting up camera to be attached to spring arm
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
-	
-	
 
 	//Making player face the right way when moving
 	bUseControllerRotationPitch = false;
@@ -81,7 +79,6 @@ void APlayerCharacter::MoveForwards(float inputValue)
 	if(inputValue != 0)
 	{
 		GetCharacterMovement()->AddInputVector(FVector(inputValue, 0.0f, 0.0f));
-		UE_LOG(LogTemp, Warning, TEXT("Character Velocity X:%f Y:%f Z:%f"), GetVelocity().X, GetVelocity().Y, GetVelocity().Z);
 	}
 }
 
@@ -90,6 +87,5 @@ void APlayerCharacter::MoveRight(float inputValue)
 	if(inputValue != 0)
 	{
 		GetCharacterMovement()->AddInputVector(FVector(0.0f, inputValue, 0.0f));
-		UE_LOG(LogTemp, Warning, TEXT("Character Velocity X:%f Y:%f Z:%f"), GetVelocity().X, GetVelocity().Y, GetVelocity().Z);
 	}
 }
