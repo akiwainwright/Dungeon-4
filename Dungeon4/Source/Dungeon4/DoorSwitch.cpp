@@ -34,7 +34,8 @@ void ADoorSwitch::BeginPlay()
 {
 	Super::BeginPlay();
 	M_InitialPosition = GetActorLocation();
-	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &ADoorSwitch::TriggerSwitch);	
+	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &ADoorSwitch::TriggerSwitch);
+	TriggerBox->OnComponentEndOverlap.AddDynamic(this, &ADoorSwitch::MovedOffSwitch);
 }
 
 // Called every frame
@@ -61,8 +62,7 @@ void ADoorSwitch::TriggerSwitch(UPrimitiveComponent* OverlappedComponent, AActor
 	}
 }
 
-void ADoorSwitch::MovedOffSwitch(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-   UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ADoorSwitch::MovedOffSwitch(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	M_PlayerOnSwitch = false;
 }
