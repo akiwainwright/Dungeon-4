@@ -35,6 +35,8 @@ APlayerCharacter::APlayerCharacter()
 	bUseControllerRotationYaw = false;
 	
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+	
+	GetCharacterMovement()->AirControl = 2.5f;
 }
 
 // Called when the game starts or when spawned
