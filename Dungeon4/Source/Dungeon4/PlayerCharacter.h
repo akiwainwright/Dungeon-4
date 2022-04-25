@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Camera/CameraComponent.h"
+#include "Components/PointLightComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "PlayerCharacter.generated.h"
@@ -16,7 +17,7 @@ class DUNGEON4_API APlayerCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
-
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Character Mesh")
 	USkeletalMeshComponent* CharacterMesh;
 
@@ -25,12 +26,16 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Camera")
 	UCameraComponent* Camera;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Light")
+	UPointLightComponent* PlayerTorch;
 
 	//Making the players rely on its movement to adjust facing direction
 
 private:
 	float M_ZoomRate;
-	
+
+	FName M_ProfileName;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

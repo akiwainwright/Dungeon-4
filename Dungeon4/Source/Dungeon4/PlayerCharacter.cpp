@@ -12,6 +12,9 @@ APlayerCharacter::APlayerCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	M_ProfileName = "Player";
+	GetCapsuleComponent()->SetCollisionProfileName(M_ProfileName);
+	
 	//Setting up the spring arm for camera
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(GetRootComponent());
@@ -29,6 +32,12 @@ APlayerCharacter::APlayerCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 
+	//Adding torch for player to see in the dungeon
+	PlayerTorch = CreateDefaultSubobject<UPointLightComponent>(TEXT("Light"));
+	PlayerTorch->SetupAttachment(GetRootComponent());
+	PlayerTorch->Intensity = 10000.0f;
+	PlayerTorch->AttenuationRadius = 750.0f;
+
 	//Making player face the right way when moving
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
@@ -43,7 +52,6 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame

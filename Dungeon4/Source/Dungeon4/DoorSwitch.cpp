@@ -58,6 +58,7 @@ void ADoorSwitch::TriggerSwitch(UPrimitiveComponent* OverlappedComponent, AActor
 	M_PlayerOnSwitch = true;
 	if(!TargetDoor->DoorOpened())
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Player On Switch"));
 		GetWorldTimerManager().SetTimer(DoorSwitchPressDelay, this, &ADoorSwitch::SwitchTriggered, M_PressDelay);
 	}
 }
