@@ -22,8 +22,29 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+private:
+	float M_MoveSpeed;
+
+	FVector M_InitialLocation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = true), Category="Moving Platform")
+	float M_Amplitude;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = true), Category="Moving Platform")
+	float M_Period;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = true), Category="Moving Platform")
+	float M_PhaseShift;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = true), Category="Moving Platform")
+	float M_VerticalShift;
+
+	float M_SinXValue;
+	
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 };
+
+
