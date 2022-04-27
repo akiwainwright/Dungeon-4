@@ -3,6 +3,7 @@
 
 #include "FallOffTriggerZone.h"
 
+#include "PlayerCharacter.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
@@ -41,7 +42,7 @@ void AFallOffTriggerZone::Tick(float DeltaTime)
 void AFallOffTriggerZone::ResetPlayerPosition(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if(OtherActor->GetClass()->GetFName() == "PlayerCharacter_BP_C")
+	if(OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
 		OtherActor->SetActorLocation(ResetPosition->GetActorLocation());
 	}
