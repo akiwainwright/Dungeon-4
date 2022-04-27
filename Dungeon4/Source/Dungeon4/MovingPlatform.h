@@ -18,33 +18,45 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Mesh")
 	UStaticMeshComponent* PlatformMesh;
 
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category="Moving Platform")
+	int Direction;
+
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category="Moving Platform")
+	float WaitTime;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 private:
-	float M_MoveSpeed;
 
 	FVector M_InitialLocation;
+	FRotator M_InitialRotation;
 
+	//Sin Amplitude - A
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = true), Category="Moving Platform")
-	float M_Amplitude;
+	float M_MoveRange; //Double this will be the range of motion for the platform
 
+	//Sin Period - B 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = true), Category="Moving Platform")
-	float M_Period;
+	float M_PlatformSpeed;
 
+	//Sin Phase Shift - C
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = true), Category="Moving Platform")
-	float M_PhaseShift;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = true), Category="Moving Platform")
+	float M_StartPosition; //Initial X Value of Sin Graph
+	
 	float M_VerticalShift;
 
 	float M_SinXValue;
-	
 
+	bool bWait;
+
+	FTimerHandle WaitTimeHandler;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void CheckWait();
 };
 
 

@@ -12,13 +12,17 @@ AMovingPlatform::AMovingPlatform()
 	PlatformMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Platform Mesh"));
 	PlatformMesh->SetupAttachment(GetRootComponent());
 
-	M_Amplitude = 450.0f; //Platform move range from start position is double this
-	M_Period = 1.0f; //Speed at which the platform moves
-	M_PhaseShift = -90.0f; //Startpoint on sin graph
+	M_MoveRange = 450.0f; //Platform move range from start position is double this
+	M_PlatformSpeed = 1.0f; //Speed at which the platform moves
+	M_StartPosition = 0.0f; //Startpoint on sin graph
 	M_VerticalShift = 0.0f;
 
 	M_SinXValue = 0.0f;
-	
+
+	Direction = 1;
+
+	bWait = false;
+	WaitTime = 0.5f;
 
 }
 
@@ -26,7 +30,8 @@ AMovingPlatform::AMovingPlatform()
 void AMovingPlatform::BeginPlay()
 {
 	Super::BeginPlay();
-	M_InitialLocation = GetActorLocation();	
+	M_InitialLocation = GetActorLocation();
+	M_InitialRotation = GetActorRotation();
 }
 
 // Called every frame
@@ -36,27 +41,38 @@ void AMovingPlatform::Tick(float DeltaTime)
 
 	FVector NextLocation = GetActorLocation();
 
-	FRotator currentRotation = GetActorRotation();
-
-	if(currentRotation.Yaw == 0)
+	if(!bWait)
 	{
-		NextLocation.Y = M_InitialLocation.Y + (M_Amplitude * sin(M_Period * (M_SinXValue + M_PhaseShift) + M_VerticalShift));
+		if(M_InitialRotation.Yaw == 0)
+		{
+			NextLocation.Y = M_InitialLocation.Y + (Direction * (M_MoveRange * sin(M_PlatformSpeed * (M_SinXValue + M_StartPosition) + M_VerticalShift)));
+			
+			if(NextLocation.Y <= M_InitialLocation.Y - M_MoveRange + 1.0f || NextLocation.Y >= M_InitialLocation.Y + M_MoveRange - 1.0f)
+			{
+				bWait = !bWait;
+				GetWorldTimerManager().SetTimer(WaitTimeHandler, this, &AMovingPlatform::CheckWait, WaitTime);
+			}
+		}
+		else
+		{
+			NextLocation.X = M_InitialLocation.X + (Direction * (M_MoveRange * sin(M_PlatformSpeed * (M_SinXValue + M_StartPosition) + M_VerticalShift)));
+			
+			if(NextLocation.X <= M_InitialLocation.X - M_MoveRange + 1.0f || NextLocation.X >= M_InitialLocation.X + M_MoveRange - 1.0f)
+			{
+				bWait = !bWait;
+				GetWorldTimerManager().SetTimer(WaitTimeHandler, this, &AMovingPlatform::CheckWait, WaitTime);
+			}
+		}
+
+
+		SetActorRelativeLocation(NextLocation);
+
+		M_SinXValue += DeltaTime;
 	}
-	else
-	{
-		NextLocation.X = M_InitialLocation.X + (M_Amplitude * sin(M_Period * (M_SinXValue + M_PhaseShift) + M_VerticalShift));
-	}
+}
 
-	
-
-	SetActorRelativeLocation(NextLocation);
-
-	M_SinXValue += DeltaTime;
-
-	//stopping sin x value continuously getting bigger
-	// if(M_SinXValue > 360)
-	// {
-	// 	M_SinXValue -= 360;
-	// }
+void AMovingPlatform::CheckWait()
+{
+	bWait = false;
 }
 
