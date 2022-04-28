@@ -50,7 +50,6 @@ public:
 	void ZoomCamera(float inputValue);
 	void MoveForwards(float inputValue);
 	void MoveRight(float inputValue);
-
 };
 
 

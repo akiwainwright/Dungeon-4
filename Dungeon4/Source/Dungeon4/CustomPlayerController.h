@@ -31,17 +31,27 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Player Stats")
 	float Health = 75.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Rooms")
+	int CurrentRoomNumber = 1;
+
+	UPROPERTY()
+	APawn* PossessedPawn;
 	
 protected:
 	virtual void BeginPlay() override;
+	virtual void OnPossess(APawn* InPawn) override;
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateHealthBar();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateRoomNumber();
+
 	void UpdateHealth(float healthChange);
 
-	UFUNCTION(BlueprintCallable)
-	float GetHealthPercent();
-	
+	void DecreaseHealth();
+
+	void CurrentRoom(int roomNumber);
 };

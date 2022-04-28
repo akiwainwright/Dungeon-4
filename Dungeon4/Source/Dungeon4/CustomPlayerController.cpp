@@ -10,6 +10,7 @@
 
 void ACustomPlayerController::BeginPlay()
 {
+	InputComponent->BindAction("LoseHealth", IE_Pressed, this, &ACustomPlayerController::DecreaseHealth);
 	Super::BeginPlay();
 
 	UGameplayStatics::PlaySound2D(this, DungoenBGM);
@@ -22,7 +23,14 @@ void ACustomPlayerController::BeginPlay()
 		HUD->SetVisibility(ESlateVisibility::Visible);
 
 		UpdateHealthBar();
+		UpdateRoomNumber();
 	}
+}
+
+void ACustomPlayerController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+	PossessedPawn = InPawn;
 }
 
 void ACustomPlayerController::UpdateHealth(float healthChange)
@@ -35,9 +43,25 @@ void ACustomPlayerController::UpdateHealth(float healthChange)
 	}
 }
 
-float ACustomPlayerController::GetHealthPercent()
+void ACustomPlayerController::DecreaseHealth()
 {
-	return Health/MaxHealth;
+	UpdateHealth(-10.0f);
+
+	if(Health <= 0)
+	{
+		PossessedPawn->Destroy();
+		UE_LOG(LogTemp, Warning, TEXT("YOU LOSE"));
+	}
+}
+
+void ACustomPlayerController::CurrentRoom(int roomNumber)
+{
+	CurrentRoomNumber = roomNumber;
+
+	if(HUD->GetName().Contains("Main"))
+	{
+		UpdateRoomNumber();
+	}
 }
 	
 	
