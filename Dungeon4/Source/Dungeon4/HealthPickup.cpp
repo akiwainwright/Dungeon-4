@@ -3,6 +3,9 @@
 
 #include "HealthPickup.h"
 
+#include "CustomPlayerController.h"
+#include "GameFramework/Character.h"
+
 void AHealthPickup::BeginPlay()
 {
 	Super::BeginPlay();
@@ -13,5 +16,11 @@ void AHealthPickup::PickupItem(UPrimitiveComponent* OverlappedComponent, AActor*
                                UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	Super::PickupItem(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
-	UE_LOG(LogTemp, Warning, TEXT("Healed up Some Health Points"));
+
+	ACharacter* player = Cast<ACharacter>(OtherActor);
+	ACustomPlayerController* PlayerController = Cast<ACustomPlayerController>(player->GetController());
+	PlayerController->UpdateHealth(30.0f);
+
+	UE_LOG(LogTemp, Warning, TEXT("Remaining Health: %f"), PlayerController->Health);
+	Destroy();
 }

@@ -52,8 +52,6 @@ void APickups::PickupItem(UPrimitiveComponent* OverlappedComponent, AActor* Othe
 		 {
 		 	UGameplayStatics::PlaySound2D(this, PickupSFX);
 		 }
-
-		Destroy();
 	}
 }
 // Called every frame
