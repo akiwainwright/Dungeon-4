@@ -48,10 +48,10 @@ void APickups::PickupItem(UPrimitiveComponent* OverlappedComponent, AActor* Othe
 		
 		PlayPickupEffect(mesh);
 		
-		if(PickupSFX != nullptr)
-		{
-			UGameplayStatics::PlaySound2D(this, PickupSFX);
-		}
+		 if(PickupSFX != nullptr)
+		 {
+		 	UGameplayStatics::PlaySound2D(this, PickupSFX);
+		 }
 
 		Destroy();
 	}
