@@ -12,6 +12,8 @@ APlayerWeapon::APlayerWeapon()
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Weapon Mesh"));
 	SetRootComponent(WeaponMesh);
 
+	WeaponMesh->SetCollisionResponseToAllChannels(ECR_Ignore);
+
 }
 
 // Called when the game starts or when spawned
