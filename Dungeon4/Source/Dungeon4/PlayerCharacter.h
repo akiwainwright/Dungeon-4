@@ -31,6 +31,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Light")
 	UPointLightComponent* PlayerTorch;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Throw Start Point")
+	class USceneComponent* ThrowWeaponSpawnPoint;
+
 private:
 	float M_ZoomRate;
 
@@ -49,6 +52,9 @@ public:
 	void ZoomCamera(float inputValue);
 	void MoveForwards(float inputValue);
 	void MoveRight(float inputValue);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ThrowWeapon();
 };
 
 
