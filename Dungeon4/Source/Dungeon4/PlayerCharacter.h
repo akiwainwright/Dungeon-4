@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PlayerWeapon.h"
 #include "Camera/CameraComponent.h"
 #include "Components/PointLightComponent.h"
 #include "GameFramework/Character.h"
@@ -18,7 +19,7 @@ public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Character Mesh")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character Mesh")
 	USkeletalMeshComponent* CharacterMesh;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Camera")
@@ -29,8 +30,6 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Light")
 	UPointLightComponent* PlayerTorch;
-
-	//Making the players rely on its movement to adjust facing direction
 
 private:
 	float M_ZoomRate;

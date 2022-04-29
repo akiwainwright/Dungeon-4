@@ -4,6 +4,7 @@
 #include "PlayerCharacter.h"
 
 #include "Components/CapsuleComponent.h"
+#include "Engine/SkeletalMeshSocket.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -14,13 +15,12 @@ APlayerCharacter::APlayerCharacter()
 
 	M_ProfileName = "Player";
 	GetCapsuleComponent()->SetCollisionProfileName(M_ProfileName);
-	
 	//Setting up the spring arm for camera
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(GetRootComponent());
 	SpringArm->TargetArmLength = 700.0f;
 	SpringArm->SetRelativeRotation(FRotator(-70.0f, 0.0f, 0.0f));
-
+	
 	//Preventing the camera from rotating with the camera
 	SpringArm->bInheritPitch = false;
 	SpringArm->bInheritRoll = false;
