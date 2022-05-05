@@ -17,9 +17,6 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Spawn Volume")
 	class UBoxComponent* SpawnVolume;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemies")
-	class AEnemies* EnemyToSpawn;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemies")
 	int AmountToSpawn;

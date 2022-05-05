@@ -73,7 +73,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForwards);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerCharacter::Attack);
@@ -105,9 +105,17 @@ void APlayerCharacter::MoveRight(float inputValue)
 	}
 }
 
-void APlayerCharacter::Attack()
+void APlayerCharacter::Jump()
 {
 	if(!bIsAttacking)
+	{
+		Super::Jump();
+	}
+}
+
+void APlayerCharacter::Attack()
+{
+	if(!bIsAttacking && GetCharacterMovement()->IsWalking())
 	{
 		bIsAttacking = true;
 		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
