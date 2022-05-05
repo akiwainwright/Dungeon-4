@@ -3,6 +3,7 @@
 
 #include "PlayerCharacter.h"
 
+#include "PlayerAnimInstance.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -45,7 +46,9 @@ APlayerCharacter::APlayerCharacter()
 	
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	
-	GetCharacterMovement()->AirControl = 2.5f;
+	GetCharacterMovement()->AirControl = 1.5f;
+
+	bIsAttacking = false;
 }
 
 // Called when the game starts or when spawned
@@ -72,6 +75,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerCharacter::Attack);
 	
 
 }
@@ -86,7 +91,7 @@ void APlayerCharacter::ZoomCamera(float inputValue)
 
 void APlayerCharacter::MoveForwards(float inputValue)
 {
-	if(inputValue != 0)
+	if(inputValue != 0 && !bIsAttacking)
 	{
 		GetCharacterMovement()->AddInputVector(FVector(inputValue, 0.0f, 0.0f));
 	}
@@ -94,8 +99,53 @@ void APlayerCharacter::MoveForwards(float inputValue)
 
 void APlayerCharacter::MoveRight(float inputValue)
 {
-	if(inputValue != 0)
+	if(inputValue != 0 && !bIsAttacking)
 	{
 		GetCharacterMovement()->AddInputVector(FVector(0.0f, inputValue, 0.0f));
 	}
+}
+
+void APlayerCharacter::Attack()
+{
+	if(!bIsAttacking)
+	{
+		bIsAttacking = true;
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+		if(!AnimInstance->IsA(UPlayerAnimInstance::StaticClass()) && !FightAnimMontage)
+		{
+			return;
+		}
+		UPlayerAnimInstance* PlayerAnimInstance = Cast<UPlayerAnimInstance>(AnimInstance);
+
+		int FightMontageSection = FMath::RandRange(0, 2);
+
+		switch (FightMontageSection)
+		{
+			case 0:
+			{
+					PlayerAnimInstance->Montage_Play(FightAnimMontage, 2.2f);
+					PlayerAnimInstance->Montage_JumpToSection(FName("Slash"), FightAnimMontage);
+				break;
+			}
+			case 1:
+			{
+					PlayerAnimInstance->Montage_Play(FightAnimMontage, 2.75f);
+					PlayerAnimInstance->Montage_JumpToSection(FName("OutSlash"), FightAnimMontage);
+				break;
+			}
+			case 2:
+			{
+					PlayerAnimInstance->Montage_Play(FightAnimMontage, 2.75f);
+					PlayerAnimInstance->Montage_JumpToSection(FName("InSlash"), FightAnimMontage);
+				break;
+			}
+			default:
+				break;
+		}
+	}
+}
+
+void APlayerCharacter::AttackFinished()
+{
+	bIsAttacking = false;
 }

@@ -34,6 +34,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Throw Start Point")
 	class USceneComponent* ThrowWeaponSpawnPoint;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Combat")
+	bool bIsAttacking;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Combat")
+	class UAnimMontage* FightAnimMontage;
+
 private:
 	float M_ZoomRate;
 
@@ -55,6 +61,11 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void ThrowWeapon();
+
+	void Attack();
+
+	UFUNCTION(BlueprintCallable)
+	void AttackFinished();
 };
 
 
