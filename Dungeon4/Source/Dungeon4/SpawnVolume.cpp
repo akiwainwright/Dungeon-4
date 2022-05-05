@@ -28,8 +28,10 @@ void ASpawnVolume::Tick(float DeltaTime)
 
 }
 
-void ASpawnVolume::GenerateSpawnLocation()
+FVector ASpawnVolume::GenerateSpawnLocation()
 {
 	FVector GeneratedPosition = UKismetMathLibrary::RandomPointInBoundingBox(SpawnVolume->GetComponentLocation(), SpawnVolume->GetScaledBoxExtent());
+
+	return  GeneratedPosition;
 }
 
