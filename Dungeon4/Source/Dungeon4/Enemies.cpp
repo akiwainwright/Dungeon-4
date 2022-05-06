@@ -20,12 +20,15 @@ AEnemies::AEnemies()
 	AttackRange = CreateDefaultSubobject<USphereComponent>(TEXT("Attack Range"));
 	AttackRange->SetupAttachment(GetRootComponent());
 
+	bIsAlive = true;
+
 }
 
 // Called when the game starts or when spawned
 void AEnemies::BeginPlay()
 {
 	Super::BeginPlay();
+	Health = MaxHealth;
 	EnemyController = Cast<AAIController>(GetController());
 
 	EnemyVision->OnComponentBeginOverlap.AddDynamic(this, &AEnemies::PlayerEnteredVision);
@@ -51,32 +54,44 @@ void AEnemies::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AEnemies::PlayerEnteredVision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	InPursuitRange = true;
-	SetCurrentState(EnemyStates::EnemyState_Pursue);
-	PursuePlayer(OtherActor);
+	if(Health > 0)
+	{
+		InPursuitRange = true;
+		SetCurrentState(EnemyStates::EnemyState_Pursue);
+		PursuePlayer(OtherActor);
+	}
 }
 
 void AEnemies::PlayerLeftVision(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	InPursuitRange = false;
-	SetCurrentState(EnemyStates::EnemyState_Idle);
-	StopPursuing();
+	if(Health > 0)
+	{
+		InPursuitRange = false;
+		SetCurrentState(EnemyStates::EnemyState_Idle);
+		StopPursuing();
+	}
 }
 
 void AEnemies::PlayerEnteredAttackRange(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	InAttackRange = true;
 	StopPursuing();
-	SetCurrentState(EnemyStates::EnemyState_Attack);
+	if(Health > 0)
+	{
+		InAttackRange = true;
+		if(!bIsAttacking)
+		{
+			bIsAttacking = true;
+			AttackPlayer();
+		}
+	}
 }
 
 void AEnemies::PlayerLeftAttackRange(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	InAttackRange = false;
-	
-	if(CurrentState != EnemyStates::EnemyState_Attack)
+	if(Health > 0)
 	{
+		InAttackRange = false;
 		if(InPursuitRange)
 		{
 			PursuePlayer(OtherActor);
@@ -85,6 +100,54 @@ void AEnemies::PlayerLeftAttackRange(UPrimitiveComponent* OverlappedComp, AActor
 		{
 			StopPursuing();
 		}
+		
 	}
 }
+
+void AEnemies::UpdateHealth(float Damage)
+{
+	Health -= Damage;
+	UpdateHealthBar();
+	
+	if(Health > MaxHealth)
+	{
+		Health = MaxHealth;
+	}
+
+	if(Health <= 0)
+	{
+		Health = 0;
+		bIsAlive = false;
+		DecreaseEnemyCount();
+		DeathSequence();
+	}
+}
+
+void AEnemies::BeginAttackFrames()
+{
+	if(Weapon)
+	{
+		Weapon->WeaponMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	}
+}
+
+void AEnemies::EndAttackFrames()
+{
+	if(Weapon)
+	{
+		Weapon->WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+}
+
+void AEnemies::DestroyObject()
+{
+	if(Weapon)
+	{
+		Weapon->Destroy();
+	}
+	GetController()->Destroy();
+	Destroy();
+}
+
+
 

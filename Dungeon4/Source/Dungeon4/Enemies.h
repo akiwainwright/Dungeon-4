@@ -32,6 +32,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Stats")
 	class USphereComponent* AttackRange;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Equipped weapon")
+	class APlayerWeapon* Weapon;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Stats")
 	float MaxHealth;
 
@@ -47,11 +50,26 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetCurrentState(EnemyStates NextState) { CurrentState = NextState; }
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat")
 	bool InPursuitRange;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat")
 	bool InAttackRange;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat")
+	bool bCanTakeDamate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat")
+	bool bIsAttacking;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat")
+	bool bIsAlive;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat")
+	class UUserWidget* HealthBar;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite,Category="Animation")
+	class UAnimMontage* FightMontage;
 
 protected:
 	// Called when the game starts or when spawned
@@ -81,5 +99,35 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void StopPursuing();
+
+	void UpdateHealth(float Damage);
+
+	UFUNCTION(BlueprintCallable)
+	void BeginAttackFrames();
+
+	UFUNCTION(BlueprintCallable)
+	void EndAttackFrames();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateHealthBar();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void AttackPlayer();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void DecreaseEnemyCount();
+
+	UFUNCTION(BlueprintCallable)
+	void AttackAgain() { AttackPlayer();}
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void DeathSequence();
+
+	UFUNCTION(BlueprintCallable)
+	void DestroyObject();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayDamageEffect(FVector Location);
+	
 
 };

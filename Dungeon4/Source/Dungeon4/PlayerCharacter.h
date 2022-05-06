@@ -40,6 +40,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Combat")
 	class UAnimMontage* FightAnimMontage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Equipped weapon")
+	class APlayerWeapon* Weapon;
+
 private:
 	float M_ZoomRate;
 
@@ -67,6 +70,18 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void AttackFinished();
+
+	UFUNCTION(BlueprintCallable)
+	void BeginAttackFrames();
+
+	UFUNCTION(BlueprintCallable)
+	void EndAttackFrames();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayDamageEffect(FVector Location);
+
+	UFUNCTION(BlueprintCallable)
+	void StartPlayingEffect(FVector Location){ PlayDamageEffect(Location);};
 };
 
 

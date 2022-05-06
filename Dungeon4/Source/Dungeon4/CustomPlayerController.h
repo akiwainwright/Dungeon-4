@@ -37,6 +37,8 @@ public:
 
 	UPROPERTY()
 	APawn* PossessedPawn;
+
+	bool bIsAlive = true;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -49,9 +51,18 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateRoomNumber();
 
+	UFUNCTION(BlueprintCallable)
 	void UpdateHealth(float healthChange);
 
 	void DecreaseHealth();
 
 	void CurrentRoom(int roomNumber);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PauseScreen();
+
+	void PauseGame();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void DeathSequence();
 };

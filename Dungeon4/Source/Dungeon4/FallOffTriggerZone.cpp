@@ -3,6 +3,7 @@
 
 #include "FallOffTriggerZone.h"
 
+#include "CustomPlayerController.h"
 #include "PlayerCharacter.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -44,7 +45,11 @@ void AFallOffTriggerZone::ResetPlayerPosition(UPrimitiveComponent* OverlappedCom
 {
 	if(OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
-		OtherActor->SetActorLocation(ResetPosition->GetActorLocation());
+		APlayerCharacter* Player = Cast<APlayerCharacter>(OtherActor);
+		Player->SetActorLocation(ResetPosition->GetActorLocation());
+
+		ACustomPlayerController* PlayerController = Cast<ACustomPlayerController>(Player->GetController());
+		PlayerController->UpdateHealth(PlayerController->MaxHealth * 0.2f);
 	}
 }
 

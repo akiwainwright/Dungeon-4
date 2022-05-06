@@ -11,9 +11,12 @@
 void ACustomPlayerController::BeginPlay()
 {
 	InputComponent->BindAction("LoseHealth", IE_Pressed, this, &ACustomPlayerController::DecreaseHealth);
+	InputComponent->BindAction("Pause", IE_Pressed, this, &ACustomPlayerController::PauseGame);
 	Super::BeginPlay();
 
 	UGameplayStatics::PlaySound2D(this, DungoenBGM);
+
+	Health = MaxHealth;
 
 	if(HUDBase != nullptr)
 	{
@@ -35,12 +38,33 @@ void ACustomPlayerController::OnPossess(APawn* InPawn)
 
 void ACustomPlayerController::UpdateHealth(float healthChange)
 {
-	Health += healthChange;
+	Health -= healthChange;
 
-	if(HUD->GetName().Contains("Main"))
+	if(Health > MaxHealth)
 	{
-		UpdateHealthBar();
+		Health = MaxHealth;
 	}
+
+	if(Health <= 0)
+	{
+		if(bIsAlive)
+		{
+			if(HUD->GetName().Contains("Main"))
+			{
+				UpdateHealthBar();
+			}
+			bIsAlive = false;
+			DeathSequence();
+		}
+	}
+	else
+	{
+		if(HUD->GetName().Contains("Main"))
+		{
+			UpdateHealthBar();
+		}
+	}
+	
 }
 
 void ACustomPlayerController::DecreaseHealth()
@@ -62,6 +86,11 @@ void ACustomPlayerController::CurrentRoom(int roomNumber)
 	{
 		UpdateRoomNumber();
 	}
+}
+
+void ACustomPlayerController::PauseGame()
+{
+	PauseScreen();
 }
 	
 	

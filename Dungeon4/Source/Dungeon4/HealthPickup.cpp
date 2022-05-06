@@ -19,7 +19,7 @@ void AHealthPickup::PickupItem(UPrimitiveComponent* OverlappedComponent, AActor*
 
 	ACharacter* player = Cast<ACharacter>(OtherActor);
 	ACustomPlayerController* PlayerController = Cast<ACustomPlayerController>(player->GetController());
-	PlayerController->UpdateHealth(30.0f);
+	PlayerController->UpdateHealth(-30.0f);
 
 	UE_LOG(LogTemp, Warning, TEXT("Remaining Health: %f"), PlayerController->Health);
 	Destroy();

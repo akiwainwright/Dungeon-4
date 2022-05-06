@@ -18,6 +18,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Mesh")
 	UStaticMeshComponent* WeaponMesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Mesh")
+	USceneComponent* EffectSpawnLocation;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Stats")
+	float Damage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SFX")
+	class USoundCue* SoundCue;
+
+	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -28,5 +39,8 @@ public:
 
 	UStaticMeshComponent* GetMesh(){ return WeaponMesh;}
 	void SetMesh(UStaticMeshComponent* mesh) { WeaponMesh = mesh;}
+
+	UFUNCTION()
+	void Hit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
 
 };

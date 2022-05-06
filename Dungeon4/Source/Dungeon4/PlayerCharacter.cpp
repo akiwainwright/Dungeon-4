@@ -55,6 +55,7 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
 }
 
 // Called every frame
@@ -156,4 +157,14 @@ void APlayerCharacter::Attack()
 void APlayerCharacter::AttackFinished()
 {
 	bIsAttacking = false;
+}
+
+void APlayerCharacter::BeginAttackFrames()
+{
+	Weapon->WeaponMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+}
+
+void APlayerCharacter::EndAttackFrames()
+{
+	Weapon->WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
