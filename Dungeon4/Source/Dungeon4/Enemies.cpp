@@ -114,7 +114,7 @@ void AEnemies::UpdateHealth(float Damage)
 		Health = MaxHealth;
 	}
 
-	if(Health <= 0)
+	if(Health <= 0 && bIsAlive)
 	{
 		Health = 0;
 		bIsAlive = false;
